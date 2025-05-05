@@ -1,0 +1,59 @@
+# Gradle files
+.gradle/
+build/
+.gradle-wrapper/
+
+# Local configuration
+local.properties
+
+# Signing files
+*.jks
+*.keystore
+
+# IDE and OS files
+.idea/
+*.iml
+.DS_Store
+.vscode/
+*.code-workspace
+
+# Logs
+*.log
+
+# Android Studio Navigation Editor temp files
+.navigation/
+
+# Generated files
+/captures/
+/output.json
+*.apk
+*.aab
+*.apks
+
+# NDK
+.externalNativeBuild/
+
+# Kotlin build files
+.kotlinc/
+
+# Jetpack Compose compiler
+.compose-cache/
+
+# Crashlytics
+fabric.properties
+
+# Testing and reports
+test-results/
+reports/
+
+# Database or local storage
+*.db
+*.sqlite
+
+# Third-party tools
+firebase.json
+*.env
+
+# Backup files
+*.bak
+*.backup
