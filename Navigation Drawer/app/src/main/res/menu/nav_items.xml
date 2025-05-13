@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <item
+        android:id="@+id/optHome"
+        android:icon="@drawable/ic_baseline_home_24"
+        android:title="Home"/>
+    <item
+        android:id="@+id/optNotes"
+        android:icon="@drawable/ic_baseline_notes_24"
+        android:title="Notes"/>
+    <item
+        android:id="@+id/optSetting"
+        android:icon="@drawable/ic_baseline_settings_24"
+        android:title="Settings"/>
+    <item
+        android:id="@+id/optNew"
+        android:icon="@drawable/ic_baseline_new_releases_24"
+        android:title="What's New"/>
+</menu>
