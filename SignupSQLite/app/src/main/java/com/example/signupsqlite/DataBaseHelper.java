@@ -6,61 +6,69 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import androidx.annotation.Nullable;
 
-// Database helper class for managing SQLite database operations
 public class DataBaseHelper extends SQLiteOpenHelper {
+    private static final String DATABASE_NAME = "SignLog.db";
+    private static final String TABLE_USERS = "users";
+    private static final String COLUMN_EMAIL = "email";
+    private static final String COLUMN_PASSWORD = "password";
 
-    // Static variable to define the name of the database
-    public static final String databaseName = "SignLog.db";
-
-    // Constructor for initializing the database helper
     public DataBaseHelper(@Nullable Context context) {
-        super(context, "SignLog.db", null, 1); // Database name: SignLog.db, version: 1
+        super(context, DATABASE_NAME, null, 1);
     }
-
-    // Method called when the database is created for the first time
     @Override
-    public void onCreate(SQLiteDatabase MyDatabase) {
-        // Create a table named "users" with "email" as primary key and "password" as a column
-        MyDatabase.execSQL("create Table users(email TEXT primary key, password TEXT)");
+    public void onCreate(SQLiteDatabase db) {
+        // Create the 'users' table if it doesn't exist
+        String createTableSQL = "CREATE TABLE " + TABLE_USERS + " (" +
+                COLUMN_EMAIL + " TEXT PRIMARY KEY, " +
+                COLUMN_PASSWORD + " TEXT)";
+        db.execSQL(createTableSQL);
     }
-
-    // Method called when the database version changes (to upgrade the schema)
     @Override
-    public void onUpgrade(SQLiteDatabase MyDB, int oldVersion, int newVersion) {
-        // Drop the existing "users" table if it exists
-        MyDB.execSQL("drop Table if exists users");
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        // Drop the existing table if it exists and recreate it
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_USERS);
+        onCreate(db);
+    }
+    public boolean insertData(String email, String password) {
+        // Insert user data into the 'users' table
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_EMAIL, email);
+        values.put(COLUMN_PASSWORD, password);
+
+        return db.insert(TABLE_USERS, null, values) != -1;
     }
 
-    // Method to insert user data (email and password) into the "users" table
-    public Boolean insertData(String email, String password) {
-        // Get a writable instance of the database
-        SQLiteDatabase MyDatabase = this.getWritableDatabase();
-
-        // Create ContentValues to hold the data to be inserted
-        ContentValues contentValues = new ContentValues();
-        contentValues.put("email", email); // Add email to the values
-        contentValues.put("password", password); // Add password to the values
-
-        // Insert data into the "users" table and get the result
-        long result = MyDatabase.insert("users", null, contentValues);
-
-        // Return true if insertion was successful, otherwise return false
-        return result != -1;
+    public boolean checkEmail(String email) {
+        // Check if the email already exists in the 'users' table
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT 1 FROM " + TABLE_USERS + " WHERE " + COLUMN_EMAIL + " = ?", new String[]{email});
+        boolean exists = cursor.getCount() > 0;
+        cursor.close();
+        return exists;
     }
-
-    // Method to check if an email already exists in the "users" table
-    public Boolean checkEmail(String email) {
-        // Get a writable instance of the database
+    public Boolean checkEmailPassword(String email, String password){
         SQLiteDatabase MyDatabase = this.getWritableDatabase();
-
-        // Query the "users" table to find a record with the given email
-        Cursor cursor = MyDatabase.rawQuery("Select * from users where email = ?", new String[]{email});
-
-        // If the cursor has data (email exists), return true; otherwise, return false
-        if(cursor.getCount() > 0) {
+        Cursor cursor = MyDatabase.rawQuery("Select * from users where email = ? and password = ?", new String[]{email, password});
+        if (cursor.getCount() > 0) {
             return true;
-        } else {
+        }else {
             return false;
         }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
